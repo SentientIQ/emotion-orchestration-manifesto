@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ManifestoNavigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [activeSection, setActiveSection] = useState('introduction');
   
   const sections = [
     { id: 'introduction', name: 'Introduction' },
@@ -45,35 +45,46 @@ const ManifestoNavigation = () => {
   }, []);
   
   const handleSectionClick = (id: string) => {
-    setIsOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setActiveSection(id);
+  };
+  
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
   };
   
   return (
-    <div className="fixed top-4 right-4 z-50">
-      <button 
-        className="flex items-center gap-2 bg-manifesto-purple text-white px-4 py-2 rounded-md shadow-lg"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span>Sections</span>
-        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </button>
-      
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-xl overflow-hidden z-50 animate-fade-in">
+    <div className={`fixed left-0 top-0 h-full bg-manifesto-darkPurple text-white transition-all duration-300 z-50 flex ${isCollapsed ? 'w-14' : 'w-64'}`}>
+      <div className="flex flex-col w-full h-full">
+        {/* Sidebar Header */}
+        <div className="p-4 flex items-center justify-between border-b border-manifesto-lightPurple/20">
+          {!isCollapsed && <span className="font-medium text-manifesto-purple">Manifesto Sections</span>}
+          <button 
+            onClick={toggleSidebar}
+            className={`p-1 rounded-md hover:bg-manifesto-purple/20 ${isCollapsed ? 'mx-auto' : ''}`}
+          >
+            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+        </div>
+        
+        {/* Sidebar Navigation */}
+        <div className="flex-1 overflow-y-auto py-2">
           {sections.map((section) => (
             <button
               key={section.id}
-              className={`w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors ${
-                activeSection === section.id ? 'bg-manifesto-lightPurple/20 text-manifesto-purple font-medium' : ''
+              className={`w-full text-left px-4 py-3 hover:bg-manifesto-purple/20 transition-colors flex items-center whitespace-nowrap ${
+                activeSection === section.id 
+                  ? 'bg-manifesto-purple/30 text-manifesto-lightPurple font-medium border-r-4 border-manifesto-purple' 
+                  : 'text-gray-300'
               }`}
               onClick={() => handleSectionClick(section.id)}
             >
-              {section.name}
+              <div className="w-2 h-2 rounded-full bg-manifesto-purple mr-3"></div>
+              {!isCollapsed && <span>{section.name}</span>}
             </button>
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 };

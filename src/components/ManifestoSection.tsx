@@ -17,12 +17,12 @@ const ManifestoSection = ({
   fullWidth = false 
 }: ManifestoSectionProps) => {
   return (
-    <section id={id} className={`manifesto-section ${bgColor}`}>
-      <div className={fullWidth ? "w-full" : "container mx-auto"}>
-        <h2 className="manifesto-title">{title}</h2>
+    <section id={id} className={`manifesto-section py-16 ${bgColor} scroll-mt-16`}>
+      <div className={fullWidth ? "w-full px-6" : "container mx-auto px-6"}>
+        <h2 className="manifesto-title text-3xl md:text-4xl font-bold mb-8 text-manifesto-darkPurple">{title}</h2>
         <div className="animate-fade-in">{children}</div>
       </div>
-      <div className="section-divider"></div>
+      <div className="section-divider border-b border-gray-200 mt-16"></div>
     </section>
   );
 };
